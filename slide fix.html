@@ -1,0 +1,1797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DB Square Technology</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Add this only once, just before your existing script -->
+<div id="custom-cursor" class="cursor"></div>
+<style>
+  .cursor {
+    position: fixed;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #6e72fc;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease, width 0.2s ease, height 0.2s ease;
+    z-index: 9999;
+    mix-blend-mode: difference;
+  }
+  body {
+    cursor: none;
+  }
+  @media (min-width: 1024px) and (min-height: 600px) and (hover: hover) {
+  .cursor {
+    width: 32px;
+    height: 32px;
+  }
+}
+@media (min-width: 1024px) and (min-height: 600px) and (hover: hover) {
+  .cursor {
+    width: 32px;
+    height: 32px;
+  }
+}
+.cursor.hover-effect {
+  transform: translate(-50%, -50%) scale(1.5);
+  background: #ad1deb;
+}
+@media (min-width: 600px) and (max-width: 1023px) {
+  .service-card, .portfolio-item {
+    min-height: 60px;
+    padding: 1.5rem 2rem;
+  }
+}
+@media (min-width: 1024px) {
+  h1 { margin-bottom: 1.5rem; }
+  h2 { margin: 3rem 0 1.5rem 0; }
+  h3 { margin: 2rem 0 1rem 0; }
+  p, ul, ol { margin-bottom: 1.5rem; }
+}
+html {
+  scroll-behavior: smooth;
+}
+button, a, .service-card, .portfolio-item, .topnav a {
+  transition: all 0.2s ease-out;
+}
+
+/* Optional: Add a subtle scale effect on hover for buttons/cards */
+button:hover, .service-card:hover, .portfolio-item:hover, .topnav a:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+img, .responsive-img {
+  width: 100%;
+  height: auto;
+  max-width: 600px;
+  display: block;
+  /* Optional: Add a fade-in effect for images */
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+img.loaded, .responsive-img.loaded {
+  opacity: 1;
+}
+
+:root {
+  --primary-color: #000;
+  --secondary-color: #86868b;
+  --accent-color: #1d1d1f;
+  --background-color: #fff;
+  --section-bg: #f5f5f7;
+  --nav-gradient: linear-gradient(180deg, rgba(29, 29, 31, 0.95) 0%, rgba(29, 29, 31, 0.98) 100%);
+  --text-gradient: linear-gradient(90deg, #ffffff 0%, #e0e0e0 100%);
+  --hover-gradient: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+  --font: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: var(--font);
+  background: var(--background-color);
+  color: var(--primary-color);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.main-content {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-wrapper {
+  background: var(--nav-gradient);
+  backdrop-filter: blur(20px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 70px;
+}
+
+.nav-wrapper:hover {
+  background: rgba(29, 29, 31, 0.98);
+  box-shadow: 0 6px 40px rgba(0, 0, 0, 0.3);
+}
+
+.nav-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.nav-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: var(--hover-gradient);
+  transition: transform 0.6s ease;
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.nav-content:hover::before {
+  transform: translateX(0);
+}
+
+.logo {
+  font-size: 32px;
+  font-weight: 700;
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+}
+
+.logo:hover {
+  transform: scale(1.05) translateY(-2px);
+  filter: brightness(1.2);
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #ffffff 0%, transparent 100%);
+  transform: scaleX(0);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: right;
+}
+
+.logo:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.nav-links {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 24px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  border: 1px solid transparent;
+  letter-spacing: 0.3px;
+  background: transparent;
+  overflow: hidden;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--hover-gradient);
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.nav-link:hover {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.nav-link:hover::before {
+  transform: translateX(0);
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #ffffff 0%, transparent 100%);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after {
+  width: 70%;
+}
+
+/* Add a glow effect to the active link */
+.nav-link.active {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+/* Add subtle animation for scroll */
+@keyframes navShrink {
+  from {
+    height: 70px;
+  }
+  to {
+    height: 60px;
+  }
+}
+
+.nav-wrapper.scrolled {
+  height: 60px;
+}
+
+/* Hero section adjustment */
+.hero-section {
+  padding-top: 90px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1d1d1f 0%, #2d2d2f 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+  animation: rotate 20s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 20px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-content h1 {
+  font-size: 82px;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 30px;
+  background: linear-gradient(90deg, #ffffff 0%, #e0e0e0 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 30px rgba(255,255,255,0.1);
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.hero-content h3 {
+  font-size: 32px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards 0.2s;
+}
+
+.cta-links {
+  display: flex;
+  justify-content: center;
+  gap: 35px;
+  margin-top: 50px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease forwards 0.4s;
+}
+
+.cta-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 21px;
+  font-weight: 500;
+  padding: 15px 40px;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0.1), rgba(255,255,255,0.2));
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cta-link:hover {
+  background: rgba(255,255,255,0.2);
+  border-color: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.cta-link:hover::before {
+  transform: translateX(100%) skewX(-15deg);
+}
+
+.cta-link::after {
+  content: '→';
+  margin-left: 10px;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.cta-link:hover::after {
+  transform: translateX(5px);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Floating elements animation */
+.hero-section .floating-element {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-section .floating-element:nth-child(1) {
+  width: 300px;
+  height: 300px;
+  top: 10%;
+  left: 5%;
+  animation: float 20s infinite;
+}
+
+.hero-section .floating-element:nth-child(2) {
+  width: 200px;
+  height: 200px;
+  top: 60%;
+  right: 10%;
+  animation: float 15s infinite reverse;
+}
+
+.hero-section .floating-element:nth-child(3) {
+  width: 150px;
+  height: 150px;
+  bottom: 10%;
+  left: 20%;
+  animation: float 18s infinite 2s;
+}
+
+@keyframes float {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(30px, -30px) rotate(120deg); }
+  66% { transform: translate(-20px, 20px) rotate(240deg); }
+  100% { transform: translate(0, 0) rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 48px;
+  }
+
+  .hero-content h3 {
+    font-size: 24px;
+  }
+
+  .cta-links {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cta-link {
+    font-size: 18px;
+    padding: 12px 30px;
+  }
+}
+
+/* AI Solutions Section Animation */
+.ai-solutions-container {
+  position: relative;
+  padding: 40px;
+  margin: 40px 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  overflow: hidden;
+  animation: boxPulse 3s infinite;
+}
+
+.ai-solutions-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid transparent;
+  border-radius: 24px;
+  background: linear-gradient(45deg, #6e72fc, #ad1deb, #6e72fc);
+  background-size: 200% 200%;
+  animation: borderGlow 3s linear infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.ai-solutions-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(circle, rgba(110, 114, 252, 0.1) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: glowPulse 4s infinite;
+}
+
+@keyframes boxPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 0.8; }
+}
+
+.ai-feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.ai-feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 25px;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s forwards;
+}
+
+.ai-feature-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ai-feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.ai-feature-card:hover::before {
+  transform: translateX(100%);
+}
+
+.ai-feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  background: linear-gradient(45deg, #6e72fc, #ad1deb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: iconFloat 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.ai-feature-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, #ffffff, #e0e0e0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ai-feature-description {
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.ai-metrics {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+.ai-metric {
+  text-align: center;
+  animation: fadeInUp 0.6s forwards;
+  opacity: 0;
+}
+
+.ai-metric-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(45deg, #6e72fc, #ad1deb);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+
+.ai-metric-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add animation delays for staggered effect */
+.ai-feature-card:nth-child(1) { animation-delay: 0.1s; }
+.ai-feature-card:nth-child(2) { animation-delay: 0.2s; }
+.ai-feature-card:nth-child(3) { animation-delay: 0.3s; }
+.ai-feature-card:nth-child(4) { animation-delay: 0.4s; }
+
+.ai-metric:nth-child(1) { animation-delay: 0.5s; }
+.ai-metric:nth-child(2) { animation-delay: 0.6s; }
+.ai-metric:nth-child(3) { animation-delay: 0.7s; }
+</style>
+
+<script>
+document.addEventListener('scroll', () => {
+  const nav = document.querySelector('.nav-wrapper');
+  if (window.scrollY > 100) {
+    nav.classList.add('scrolled');
+  } else {
+    nav.classList.remove('scrolled');
+  }
+});
+
+// Add active state to current nav link
+document.querySelectorAll('.nav-link').forEach(link => {
+  if (link.getAttribute('href') === window.location.hash) {
+    link.classList.add('active');
+  }
+  
+  link.addEventListener('click', () => {
+    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+    link.classList.add('active');
+  });
+});
+</script>
+
+<script>
+  const cursor = document.getElementById('custom-cursor');
+  document.addEventListener('mousemove', (e) => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  // Optional: Hover effect for buttons and interactive elements
+  document.querySelectorAll('button, a, .ios-btn, .ios-grid-card, .tabbar-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('hover-effect');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('hover-effect');
+    });
+  });
+  // Add hover effect style
+  document.head.insertAdjacentHTML('beforeend', '<style>.cursor.hover-effect {transform: translate(-50%, -50%) scale(1.5); background: #ad1deb;}</style>');
+</script>
+</head>
+<body>
+  <canvas id="network-canvas"></canvas>
+  <div class="ios-header">
+    <span class="logo-elegant">
+      <span class="db">DB</span><sup class="sup2">2</sup>
+      <span class="tech">Technology</span>
+    </span>
+  </div>
+  <main class="main-content">
+    <nav class="nav-wrapper">
+      <div class="nav-content">
+        <a href="#" class="logo">DB²</a>
+        <div class="nav-links">
+          <a href="#services" class="nav-link">Services</a>
+          <a href="#about" class="nav-link">About</a>
+          <a href="#portfolio" class="nav-link">Portfolio</a>
+          <a href="#contact" class="nav-link">Contact</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="hero-section">
+      <div class="floating-element"></div>
+      <div class="floating-element"></div>
+      <div class="floating-element"></div>
+      <div class="hero-content">
+        <h1>Transform your digital presence</h1>
+        <h3>Innovative solutions for the modern business world</h3>
+        <div class="cta-links">
+          <a href="#services" class="cta-link">Learn more</a>
+          <a href="#contact" class="cta-link">Get in touch</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="services-grid">
+      <div class="service-box">
+        <div class="service-icon">🤖</div>
+        <h3 class="service-title">AI Solutions</h3>
+        <p class="service-description">Custom machine learning and automation solutions tailored to transform your business operations.</p>
+        <ul class="service-features">
+          <li>Machine Learning Models</li>
+          <li>Natural Language Processing</li>
+          <li>Computer Vision Systems</li>
+          <li>Predictive Analytics</li>
+        </ul>
+        <a href="#ai-details" class="service-cta">Learn More</a>
+      </div>
+
+      <div class="service-box">
+        <div class="service-icon">☁️</div>
+        <h3 class="service-title">Cloud Computing</h3>
+        <p class="service-description">Scalable and secure cloud infrastructure solutions for modern enterprises.</p>
+        <ul class="service-features">
+          <li>Cloud Migration</li>
+          <li>Infrastructure Optimization</li>
+          <li>Multi-Cloud Management</li>
+          <li>Cloud Security</li>
+        </ul>
+        <a href="#cloud-details" class="service-cta">Learn More</a>
+      </div>
+
+      <div class="service-box">
+        <div class="service-icon">🛡️</div>
+        <h3 class="service-title">Cybersecurity</h3>
+        <p class="service-description">Enterprise-grade security solutions to protect your digital assets.</p>
+        <ul class="service-features">
+          <li>Threat Detection</li>
+          <li>Security Audits</li>
+          <li>Incident Response</li>
+          <li>Compliance Management</li>
+        </ul>
+        <a href="#security-details" class="service-cta">Learn More</a>
+      </div>
+
+      <div class="service-box">
+        <div class="service-icon">📱</div>
+        <h3 class="service-title">App Development</h3>
+        <p class="service-description">Beautiful and functional applications for web and mobile platforms.</p>
+        <ul class="service-features">
+          <li>Native Mobile Apps</li>
+          <li>Progressive Web Apps</li>
+          <li>Cross-platform Solutions</li>
+          <li>UI/UX Design</li>
+        </ul>
+        <a href="#app-details" class="service-cta">Learn More</a>
+      </div>
+    </section>
+
+    <!-- Home Section -->
+    <section id="home" class="content-section ios-card active">
+      <h1>Transforming Digital Landscapes</h1>
+      <p>DB Square Technology delivers innovative digital solutions in AI, Cloud, and Cybersecurity for the modern business world.</p>
+      <div class="slider">
+        <div class="slides">
+          <div class="slide">Innovative AI Solutions</div>
+          <div class="slide">Scalable Cloud Infrastructure</div>
+          <div class="slide">Enterprise Cybersecurity</div>
+        </div>
+        <button class="prev" aria-label="Previous Slide">&#10094;</button>
+        <button class="next" aria-label="Next Slide">&#10095;</button>
+      </div>
+      <button class="ios-btn" onclick="showSection('services', 2)">Explore Solutions</button>
+    </section>
+    <!-- About Section -->
+    <section id="about" class="content-section ios-card">
+      <h2>About Us</h2>
+      <p>
+        <b>DB Square Technology</b> is a leading provider of next-generation IT solutions. Our team of experts specializes in delivering scalable, secure, and intelligent systems tailored to your business needs.<br>
+        <br>
+        <b>Our Mission:</b> Empower organizations through digital transformation.<br>
+        <b>Our Vision:</b> To be the most trusted technology partner globally.
+      </p>
+      <h3>Why Choose Us?</h3>
+      <ul>
+        <li>10+ Years of Industry Experience</li>
+        <li>Proven Track Record</li>
+        <li>Innovative & Agile Team</li>
+        <li>Customer-First Approach</li>
+      </ul>
+    </section>
+    <!-- Services Section -->
+    <section id="services" class="content-section ios-card">
+      <h2>Our Services</h2>
+      <div class="ios-grid">
+        <div class="ios-grid-card hover-glow" onclick="showService('ai-solutions')">
+          <h3>🤖 AI Solutions</h3>
+          <p>Custom ML, NLP & Automation</p>
+          <div class="price-tag">From $2500</div>
+        </div>
+        <div class="ios-grid-card hover-shake" onclick="showService('cloud-computing')">
+          <h3>☁️ Cloud Computing</h3>
+          <p>AWS, Azure & GCP Solutions</p>
+          <div class="price-tag">From $1200</div>
+        </div>
+        <div class="ios-grid-card hover-float" onclick="showService('cybersecurity')">
+          <h3>🛡️ Cybersecurity</h3>
+          <p>Enterprise-grade Security</p>
+          <div class="price-tag">From $1500</div>
+        </div>
+        <div class="ios-grid-card hover-pulse" onclick="showService('web-mobile-dev')">
+          <h3>📱 Web & Mobile Dev</h3>
+          <p>Modern Apps for All Platforms</p>
+          <div class="price-tag">From $800</div>
+        </div>
+        <div class="ios-grid-card hover-wiggle" onclick="showService('data-analytics')">
+          <h3>📊 Data Analytics</h3>
+          <p>Advanced Data Insights</p>
+          <div class="price-tag">From $1200</div>
+        </div>
+        <div class="ios-grid-card hover-zoom" onclick="showService('blockchain-dev')">
+          <h3>🔗 Blockchain Dev</h3>
+          <p>Secure Blockchain Solutions</p>
+          <div class="price-tag">From $3000</div>
+        </div>
+        <div class="ios-grid-card hover-color" onclick="showService('devops')">
+          <h3>🔄 DevOps</h3>
+          <p>CI/CD Pipelines & Automation</p>
+          <div class="price-tag">From $1200</div>
+        </div>
+        <div class="ios-grid-card hover-bounce" onclick="showService('ai-chatbots')">
+          <h3>💬 AI Chatbots</h3>
+          <p>Intelligent Customer Support</p>
+          <div class="price-tag">From $8000</div>
+        </div>
+        <div class="ios-grid-card hover-rotate" onclick="showService('arvr')">
+          <h3>👓 AR/VR Solutions</h3>
+          <p>Immersive Experiences</p>
+          <div class="price-tag">From $2200</div>
+        </div>
+        <div class="ios-grid-card hover-slide" onclick="showService('iot')">
+          <h3>🌐 IoT Integration</h3>
+          <p>Smart Device Connectivity</p>
+          <div class="price-tag">From $1400</div>
+        </div>
+        <div class="ios-grid-card hover-glow" onclick="showService('mobile-design')">
+          <h3>🎨 Mobile App Design</h3>
+          <p>User-Centric UI/UX</p>
+          <div class="price-tag">From $800</div>
+        </div>
+        <div class="ios-grid-card hover-shake" onclick="showService('ecommerce')">
+          <h3>🛒 E-commerce Solutions</h3>
+          <p>Online Store Development</p>
+          <div class="price-tag">From $1250</div>
+        </div>
+      </div>
+    </section>
+    <!-- Portfolio Section -->
+    <section class="portfolio-section">
+      <div class="portfolio-grid">
+        <div class="portfolio-item">
+          <img src="project1.jpg" alt="AI Project" class="portfolio-image">
+          <div class="portfolio-content">
+            <h3 class="portfolio-title">Smart AI Analytics</h3>
+            <p class="portfolio-description">Advanced analytics platform powered by machine learning algorithms.</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">AI</span>
+              <span class="portfolio-tag">Machine Learning</span>
+              <span class="portfolio-tag">Big Data</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="portfolio-item">
+          <img src="project2.jpg" alt="Cloud Project" class="portfolio-image">
+          <div class="portfolio-content">
+            <h3 class="portfolio-title">Cloud Migration</h3>
+            <p class="portfolio-description">Enterprise-scale cloud infrastructure transformation.</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">Cloud</span>
+              <span class="portfolio-tag">AWS</span>
+              <span class="portfolio-tag">DevOps</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="portfolio-item">
+          <img src="project3.jpg" alt="Security Project" class="portfolio-image">
+          <div class="portfolio-content">
+            <h3 class="portfolio-title">Cybersecurity Suite</h3>
+            <p class="portfolio-description">Comprehensive security solution for enterprise protection.</p>
+            <div class="portfolio-tags">
+              <span class="portfolio-tag">Security</span>
+              <span class="portfolio-tag">Encryption</span>
+              <span class="portfolio-tag">Compliance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Contact Section -->
+    <section class="contact-section">
+      <div class="contact-container">
+        <div class="contact-info">
+          <h2>Get in Touch</h2>
+          <p>Ready to transform your digital presence? Let's discuss how we can help your business grow.</p>
+          <ul class="contact-details">
+            <li><i class="📍"></i> 123 Tech Street, Digital City</li>
+            <li><i class="📧"></i> contact@dbsquare.tech</li>
+            <li><i class="📱"></i> +1 (555) 123-4567</li>
+          </ul>
+        </div>
+        
+        <form class="contact-form">
+          <div class="form-group">
+            <label class="form-label">Name</label>
+            <input type="text" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-input" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+      </div>
+    </section>
+    <!-- Service Info Pages -->
+    <section id="ai-solutions" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      
+      <div class="ai-solutions-container">
+        <h2>🤖 AI Solutions</h2>
+        <div class="price-tag">Starting at $2500 (Enterprise-grade solutions)</div>
+        
+        <div class="ai-feature-grid">
+          <div class="ai-feature-card">
+            <div class="ai-feature-icon">🧠</div>
+            <h3 class="ai-feature-title">Machine Learning</h3>
+            <p class="ai-feature-description">Custom ML models tailored to your business needs with advanced prediction capabilities.</p>
+          </div>
+          
+          <div class="ai-feature-card">
+            <div class="ai-feature-icon">💬</div>
+            <h3 class="ai-feature-title">Natural Language Processing</h3>
+            <p class="ai-feature-description">Advanced text analysis and processing for human-like understanding.</p>
+          </div>
+          
+          <div class="ai-feature-card">
+            <div class="ai-feature-icon">👁️</div>
+            <h3 class="ai-feature-title">Computer Vision</h3>
+            <p class="ai-feature-description">Image and video analysis with real-time object detection and recognition.</p>
+          </div>
+          
+          <div class="ai-feature-card">
+            <div class="ai-feature-icon">🤖</div>
+            <h3 class="ai-feature-title">Process Automation</h3>
+            <p class="ai-feature-description">Intelligent automation of business processes using RPA and AI.</p>
+          </div>
+        </div>
+        
+        <div class="ai-metrics">
+          <div class="ai-metric">
+            <div class="ai-metric-value">98%</div>
+            <div class="ai-metric-label">Accuracy Rate</div>
+          </div>
+          
+          <div class="ai-metric">
+            <div class="ai-metric-value">500+</div>
+            <div class="ai-metric-label">Projects Delivered</div>
+          </div>
+          
+          <div class="ai-metric">
+            <div class="ai-metric-value">45%</div>
+            <div class="ai-metric-label">Cost Reduction</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>⏱️ Timeline</h3>
+          <ul>
+            <li>Proof of Concept: 2-4 weeks</li>
+            <li>MVP Development: 3-6 months</li>
+            <li>Full Implementation: 6-12 months</li>
+          </ul>
+        </div>
+        
+        <div class="spec-card">
+          <h3>💼 Investment</h3>
+          <ul>
+            <li>Basic Automation: $25k-$50k</li>
+            <li>ML Model Development: $50k-$150k</li>
+            <li>Enterprise AI Suite: $200k+</li>
+          </ul>
+        </div>
+        
+        <div class="spec-card">
+          <h3>🔧 Tech Stack</h3>
+          <ul>
+            <li>TensorFlow, PyTorch, Keras</li>
+            <li>GPT-4, BERT, spaCy</li>
+            <li>AWS SageMaker, Azure ML</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+    <section id="cloud-computing" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>☁️ Cloud Computing</h2>
+      <div class="price-tag">Starting at $1200 (Basic migration)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>📦 Service Tiers</h3>
+          <ul>
+            <li>Basic Migration: $15k-$50k</li>
+            <li>Hybrid Cloud Setup: $50k-$120k</li>
+            <li>Enterprise Cloud: $150k+</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Implementation</h3>
+          <ul>
+            <li>Assessment: 2-4 weeks</li>
+            <li>Migration: 1-3 months</li>
+            <li>Optimization: Ongoing</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>🛡️ Security Features</h3>
+          <ul>
+            <li>AWS Security Hub</li>
+            <li>Azure Sentinel</li>
+            <li>GCP Security Command Center</li>
+          </ul>
+        </div>
+      </div>
+      <h3>📊 Cost Breakdown</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Infrastructure</h4>
+          <p>$0.10 - $5.00/hour per instance</p>
+        </div>
+        <div class="spec-card">
+          <h4>Storage</h4>
+          <p>$0.023 - $0.10/GB/month</p>
+        </div>
+        <div class="spec-card">
+          <h4>Support</h4>
+          <p>24/7 Enterprise: $15k/month</p>
+        </div>
+      </div>
+    </section>
+    <section id="cybersecurity" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>🛡️ Cybersecurity</h2>
+      <div class="price-tag">Starting at $1500 (Standard package)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🔒 Core Services</h3>
+          <ul>
+            <li>Security Audits & Penetration Testing</li>
+            <li>Threat Detection & Incident Response</li>
+            <li>Compliance Management (GDPR, HIPAA, PCI)</li>
+            <li>Network & Endpoint Protection</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Initial Assessment: 2-3 weeks</li>
+            <li>Remediation & Implementation: 1-3 months</li>
+            <li>Ongoing Monitoring</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic Security Audit: $20k-$50k</li>
+            <li>Enterprise Protection: $80k-$250k</li>
+            <li>Compliance Certification: $40k-$120k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>SIEM Tools</h4>
+          <p>Splunk, IBM QRadar, Microsoft Sentinel</p>
+        </div>
+        <div class="spec-card">
+          <h4>Endpoint Protection</h4>
+          <p>Symantec, CrowdStrike, SentinelOne</p>
+        </div>
+        <div class="spec-card">
+          <h4>Penetration Testing</h4>
+          <p>Metasploit, Burp Suite, Nessus</p>
+        </div>
+      </div>
+    </section>
+    <section id="web-mobile-dev" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>📱 Web & Mobile Development</h2>
+      <div class="price-tag">Starting at $800 (Basic apps)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🌐 Platforms</h3>
+          <ul>
+            <li>iOS & Android Native Apps</li>
+            <li>Cross-platform (Flutter, React Native)</li>
+            <li>Web Applications (React, Angular, Vue)</li>
+            <li>Backend & API Development</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Discovery & Design: 2-4 weeks</li>
+            <li>MVP Development: 2-4 months</li>
+            <li>Full Build: 3-8 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic App: $10k-$30k</li>
+            <li>Enterprise App: $50k-$150k</li>
+            <li>Custom Web Portal: $20k-$80k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Mobile</h4>
+          <p>Swift, Kotlin, Flutter, React Native</p>
+        </div>
+        <div class="spec-card">
+          <h4>Web</h4>
+          <p>React, Angular, Vue.js, Node.js</p>
+        </div>
+        <div class="spec-card">
+          <h4>Backend</h4>
+          <p>Node.js, Django, Spring Boot, .NET</p>
+        </div>
+      </div>
+    </section>
+    <section id="data-analytics" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>📊 Data Analytics</h2>
+      <div class="price-tag">Starting at $1200 (Standard analytics)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>📈 Key Features</h3>
+          <ul>
+            <li>Data Collection & Warehousing</li>
+            <li>Business Intelligence Dashboards</li>
+            <li>Predictive Modeling & Forecasting</li>
+            <li>Data Visualization</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Data Assessment: 2-3 weeks</li>
+            <li>Dashboard Development: 1-3 months</li>
+            <li>Model Training & Deployment: 2-6 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic Analytics: $18k-$40k</li>
+            <li>Advanced BI: $50k-$120k</li>
+            <li>Enterprise Data Lake: $100k-$300k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Analytics</h4>
+          <p>Tableau, Power BI, Looker, Google Data Studio</p>
+        </div>
+        <div class="spec-card">
+          <h4>Data Processing</h4>
+          <p>Python, R, Spark, SQL</p>
+        </div>
+        <div class="spec-card">
+          <h4>Visualization</h4>
+          <p>D3.js, Plotly, Chart.js</p>
+        </div>
+      </div>
+    </section>
+    <section id="blockchain-dev" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>🔗 Blockchain Development</h2>
+      <div class="price-tag">Starting at $3000 (Basic blockchain app)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>⛓️ Core Services</h3>
+          <ul>
+            <li>Smart Contract Development</li>
+            <li>Custom Blockchain Solutions</li>
+            <li>Tokenization & NFT Platforms</li>
+            <li>Decentralized Apps (dApps)</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Concept & Design: 2-4 weeks</li>
+            <li>Smart Contract Development: 1-3 months</li>
+            <li>Full dApp Development: 3-8 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic Smart Contract: $30k-$60k</li>
+            <li>Custom Blockchain: $80k-$200k</li>
+            <li>Enterprise dApp: $150k-$500k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Blockchain</h4>
+          <p>Ethereum, Solana, Hyperledger, Binance Smart Chain</p>
+        </div>
+        <div class="spec-card">
+          <h4>Languages</h4>
+          <p>Solidity, Rust, Go, JavaScript</p>
+        </div>
+        <div class="spec-card">
+          <h4>Tools</h4>
+          <p>Truffle, Hardhat, Remix, Web3.js</p>
+        </div>
+      </div>
+    </section>
+    <section id="devops" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>🔄 DevOps</h2>
+      <div class="price-ttag">Starting at $1200 (Basic automation)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🛠️ Core Services</h3>
+          <ul>
+            <li>CI/CD Pipeline Automation</li>
+            <li>Infrastructure as Code</li>
+            <li>Containerization & Orchestration</li>
+            <li>Monitoring & Logging</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Assessment: 1-2 weeks</li>
+            <li>Pipeline Setup: 2-4 weeks</li>
+            <li>Full Automation: 1-3 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic Automation: $12k-$30k</li>
+            <li>Enterprise DevOps: $50k-$150k</li>
+            <li>Cloud Migration: $40k-$120k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Automation</h4>
+          <p>Jenkins, GitHub Actions, GitLab CI</p>
+        </div>
+        <div class="spec-card">
+          <h4>Containerization</h4>
+          <p>Docker, Kubernetes</p>
+        </div>
+        <div class="spec-card">
+          <h4>Monitoring</h4>
+          <p>Prometheus, Grafana, ELK Stack</p>
+        </div>
+      </div>
+    </section>
+    <section id="ai-chatbots" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>💬 AI Chatbots</h2>
+      <div class="price-tag">Starting at $1000 (Basic chatbot)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🤖 Core Services</h3>
+          <ul>
+            <li>Custom AI Chatbot Development</li>
+            <li>Natural Language Understanding</li>
+            <li>Multi-channel Integration</li>
+            <li>Sentiment Analysis</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Discovery & Design: 1-2 weeks</li>
+            <li>Prototype: 2-4 weeks</li>
+            <li>Full Deployment: 1-3 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic Chatbot: $8k-$20k</li>
+            <li>Advanced AI Assistant: $30k-$80k</li>
+            <li>Enterprise Integration: $50k-$150k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>AI/NLP</h4>
+          <p>GPT-4, Dialogflow, Rasa, Microsoft LUIS</p>
+        </div>
+        <div class="spec-card">
+          <h4>Integration</h4>
+          <p>Slack, WhatsApp, Facebook Messenger, Web</p>
+        </div>
+        <div class="spec-card">
+          <h4>Deployment</h4>
+          <p>AWS Lambda, Azure Functions, Google Cloud</p>
+        </div>
+      </div>
+    </section>
+    <section id="arvr" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>👓 AR/VR Solutions</h2>
+      <div class="price-tag">Starting at $2200 (Basic AR/VR app)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🌐 Core Services</h3>
+          <ul>
+            <li>Augmented Reality (AR) Experiences</li>
+            <li>Virtual Reality (VR) Applications</li>
+            <li>3D Modeling & Animation</li>
+            <li>Interactive Simulations</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Concept & Design: 2-4 weeks</li>
+            <li>Prototype: 1-3 months</li>
+            <li>Full Build: 3-8 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic AR/VR App: $22k-$50k</li>
+            <li>Enterprise Simulation: $80k-$250k</li>
+            <li>Interactive Training: $50k-$150k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>AR/VR</h4>
+          <p>Unity, Unreal Engine, ARKit, ARCore</p>
+        </div>
+        <div class="spec-card">
+          <h4>3D Modeling</h4>
+          <p>Blender, Maya, 3ds Max</p>
+        </div>
+        <div class="spec-card">
+          <h4>Deployment</h4>
+          <p>iOS, Android, WebXR, Oculus, HTC Vive</p>
+        </div>
+      </div>
+    </section>
+    <section id="iot" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>🌐 IoT Integration</h2>
+      <div class="price-tag">Starting at $1400 (Basic IoT setup)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>📶 Core Services</h3>
+          <ul>
+            <li>IoT Device Integration</li>
+            <li>Sensor Network Setup</li>
+            <li>Real-time Data Collection</li>
+            <li>Dashboard & Analytics</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Assessment: 1-2 weeks</li>
+            <li>Prototype: 2-4 weeks</li>
+            <li>Full Deployment: 2-6 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic IoT Setup: $14k-$30k</li>
+            <li>Enterprise IoT: $50k-$150k</li>
+            <li>Smart City Solutions: $100k-$300k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Hardware</h4>
+          <p>Raspberry Pi, Arduino, ESP32, LoRaWAN</p>
+        </div>
+        <div class="spec-card">
+          <h4>Platforms</h4>
+          <p>AWS IoT, Azure IoT, Google Cloud IoT</p>
+        </div>
+        <div class="spec-card">
+          <h4>Dashboards</h4>
+          <p>Grafana, Tableau, Custom Web UIs</p>
+        </div>
+      </div>
+    </section>
+    <section id="mobile-design" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>🎨 Mobile App Design</h2>
+      <div class="price-tag">Starting at $800 (Basic UI/UX design)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🎨 Core Services</h3>
+          <ul>
+            <li>User Interface (UI) Design</li>
+            <li>User Experience (UX) Research</li>
+            <li>Wireframing & Prototyping</li>
+            <li>Interactive Mockups</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Discovery: 1-2 weeks</li>
+            <li>Wireframing: 1-2 weeks</li>
+            <li>Prototype: 2-4 weeks</li>
+            <li>Full Design: 1-3 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic UI/UX: $9k-$20k</li>
+            <li>Enterprise Design: $30k-$80k</li>
+            <li>Brand Guideline: $10k-$30k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Design Tools</h4>
+          <p>Figma, Sketch, Adobe XD</p>
+        </div>
+        <div class="spec-card">
+          <h4>Prototyping</h4>
+          <p>InVision, Marvel, Proto.io</p>
+        </div>
+        <div class="spec-card">
+          <h4>User Testing</h4>
+          <p>UserTesting, Maze, Hotjar</p>
+        </div>
+      </div>
+    </section>
+    <section id="ecommerce" class="service-info-page ios-card">
+      <button class="back-button" onclick="showSection('services', 2)">← Back to Services</button>
+      <h2>🛒 E-commerce Solutions</h2>
+      <div class="price-tag">Starting at $1250 (Basic online store)</div>
+      <div class="specs-grid">
+        <div class="spec-card">
+          <h3>🛍️ Core Services</h3>
+          <ul>
+            <li>Custom Online Store Development</li>
+            <li>Payment Gateway Integration</li>
+            <li>Inventory & Order Management</li>
+            <li>Customer Analytics</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>⏱️ Typical Timeline</h3>
+          <ul>
+            <li>Discovery & Design: 2-3 weeks</li>
+            <li>MVP Development: 2-4 months</li>
+            <li>Full Build: 3-6 months</li>
+          </ul>
+        </div>
+        <div class="spec-card">
+          <h3>💼 Market Rates</h3>
+          <ul>
+            <li>Basic Store: $16k-$40k</li>
+            <li>Enterprise Platform: $60k-$200k</li>
+            <li>Marketplace: $100k-$300k</li>
+          </ul>
+        </div>
+      </div>
+      <h3>🔧 Tech Stack</h3>
+      <div class="ios-grid">
+        <div class="spec-card">
+          <h4>Platforms</h4>
+          <p>Shopify, WooCommerce, Magento, Custom</p>
+        </div>
+        <div class="spec-card">
+          <h4>Payment</h4>
+          <p>Stripe, PayPal, Razorpay, Square</p>
+        </div>
+        <div class="spec-card">
+          <h4>Analytics</h4>
+          <p>Google Analytics, Hotjar, Mixpanel</p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3>Company</h3>
+        <ul class="footer-links">
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#careers">Careers</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Services</h3>
+        <ul class="footer-links">
+          <li><a href="#ai">AI Solutions</a></li>
+          <li><a href="#cloud">Cloud Computing</a></li>
+          <li><a href="#security">Cybersecurity</a></li>
+          <li><a href="#apps">App Development</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Resources</h3>
+        <ul class="footer-links">
+          <li><a href="#blog">Blog</a></li>
+          <li><a href="#case-studies">Case Studies</a></li>
+          <li><a href="#whitepapers">Whitepapers</a></li>
+          <li><a href="#documentation">Documentation</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3>Connect</h3>
+        <ul class="footer-links">
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#support">Support</a></li>
+          <li><a href="#newsletter">Newsletter</a></li>
+          <li><a href="#social">Social Media</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2024 DB Square Technology. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">📘</a>
+        <a href="#" class="social-link">🐦</a>
+        <a href="#" class="social-link">📸</a>
+        <a href="#" class="social-link">💼</a>
+      </div>
+    </div>
+  </footer>
+  <nav class="tabbar">
+    <button class="tabbar-btn active" onclick="showSection('home', 0)">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </button>
+    <button class="tabbar-btn" onclick="showSection('about', 1)">
+      <span class="icon">👤</span>
+      <span>About</span>
+    </button>
+    <button class="tabbar-btn" onclick="showSection('services', 2)">
+      <span class="icon">🛠️</span>
+      <span>Services</span>
+    </button>
+    <button class="tabbar-btn" onclick="showSection('portfolio', 3)">
+      <span class="icon">📁</span>
+      <span>Portfolio</span>
+    </button>
+    <button class="tabbar-btn" onclick="showSection('contact', 4)">
+      <span class="icon">✉️</span>
+      <span>Contact</span>
+    </button>
+  </nav>
+  <script>
+    // SPA Section navigation
+    function showSection(sectionId, tabIdx) {
+      document.querySelectorAll('.content-section, .service-info-page').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(sectionId)?.classList.add('active');
+      document.querySelectorAll('.tabbar-btn').forEach(tab => tab.classList.remove('active'));
+      if(tabIdx!==undefined) document.querySelectorAll('.tabbar-btn')[tabIdx].classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // Show service info page
+    function showService(serviceId) {
+      document.querySelectorAll('.content-section, .service-info-page').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(serviceId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    // On page load, show home
+    showSection('home', 0);
+    // Contact form handler (demo only)
+    function sendMessage(e) {
+      e.preventDefault();
+      document.querySelector('.contact-form').style.display = 'none';
+      document.getElementById('contact-success').style.display = 'block';
+      return false;
+    }
+    // --- Internet/Network Animation (Canvas) ---
+    const canvas = document.getElementById('network-canvas');
+    let ctx, width, height;
+    let nodes = [];
+    const NODE_COUNT = 18; // Fewer nodes for speed
+    const LINE_DIST = 110;
+    function resizeCanvas() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+    function randomNode() {
+      return {
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random()-0.5)*1.2, // Faster
+        vy: (Math.random()-0.5)*1.2,
+        r: 2+Math.random()*1.2
+      };
+    }
+    function animateNetwork() {
+      ctx.clearRect(0,0,width,height);
+      for(let i=0;i<nodes.length;i++) {
+        for(let j=i+1;j<nodes.length;j++) {
+          let dx = nodes[i].x - nodes[j].x;
+          let dy = nodes[i].y - nodes[j].y;
+          let dist = dx*dx+dy*dy;
+          if(dist < LINE_DIST*LINE_DIST) {
+            ctx.save();
+            ctx.globalAlpha = 1 - Math.sqrt(dist)/LINE_DIST;
+            ctx.strokeStyle = "#6e72fc";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+            ctx.restore();
+          }
+        }
+      }
+      for(let node of nodes) {
+        ctx.save();
+        ctx.globalAlpha = 0.85;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.r, 0, Math.PI*2);
+        ctx.fillStyle = "#ad1deb";
+        ctx.shadowColor = "#6e72fc";
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.restore();
+        node.x += node.vx;
+        node.y += node.vy;
+        if(node.x<0||node.x>width) node.vx*=-1;
+        if(node.y<0||node.y>height) node.vy*=-1;
+      }
+      requestAnimationFrame(animateNetwork);
+    }
+    function initNetwork() {
+      ctx = canvas.getContext('2d');
+      resizeCanvas();
+      nodes = [];
+      for(let i=0;i<NODE_COUNT;i++) nodes.push(randomNode());
+      animateNetwork();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('DOMContentLoaded', initNetwork);
+
+    // --- Slider Logic ---
+    const slides = document.querySelector('.slides');
+    const slideElements = document.querySelectorAll('.slide');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
+    let currentSlide = 0;
+
+    function goToSlide(index) {
+      currentSlide = index;
+      slides.style.transform = `translateX(-${currentSlide * 33.333}%)`;
+      slideElements.forEach((slide, i) => {
+        slide.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    function nextSlide() {
+      goToSlide((currentSlide + 1) % slideElements.length);
+    }
+
+    function prevSlide() {
+      goToSlide((currentSlide - 1 + slideElements.length) % slideElements.length);
+    }
+
+    // Event listeners
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      resetAutoSlide();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      resetAutoSlide();
+    });
+
+    // Auto-sliding
+    let autoSlideInterval;
+    function resetAutoSlide() {
+      clearInterval(autoSlideInterval);
+      autoSlideInterval = setInterval(nextSlide, 4000);
+    }
+
+    // Initialize
+    goToSlide(0);
+    resetAutoSlide();
+
+    function isTouchDevice() {
+      return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0);
+    }
+    if (isTouchDevice()) {
+      document.body.style.cursor = '';
+      document.getElementById('custom-cursor').style.display = 'none';
+    }
+
+    // Add smooth scroll behavior
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Form submission handler
+    const form = document.querySelector('.contact-form');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      // Add your form submission logic here
+      alert('Thank you for your message! We will get back to you soon.');
+      form.reset();
+    });
+
+    // Add intersection observer for animation triggers
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe all animated elements
+    document.querySelectorAll('.ai-feature-card, .ai-metric').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
